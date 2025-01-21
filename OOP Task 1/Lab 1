@@ -1,0 +1,34 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    float arr[20], *ptr;
+    float highest, secondHighest;
+    int i;
+
+    cout << "Enter 20 float numbers:" << endl;
+    ptr = arr;
+    for (i = 0; i < 20; i++) {
+        cin >> *ptr++;
+    }
+
+    highest = secondHighest = -3.4e38;
+    ptr = arr;
+    for (i = 0; i < 20; i++) {
+        if (*ptr > highest) {
+            secondHighest = highest;
+            highest = *ptr;
+        } else if (*ptr > secondHighest && *ptr != highest) {
+            secondHighest = *ptr;
+        }
+        ptr++;
+    }
+
+    if (secondHighest == -3.4e38) {
+        cout << "There is no second highest number, all values might be the same." << endl;
+    } else {
+        cout << "The second highest number is: " << secondHighest << endl;
+    }
+
+    return 0;
+}
