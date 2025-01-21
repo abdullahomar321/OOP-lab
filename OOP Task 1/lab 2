@@ -1,0 +1,24 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    float arr[20], *ptr;
+    float sum = 0;
+    int i;
+
+    cout << "Enter 20 float numbers:" << endl;
+    ptr = arr;
+    for (i = 0; i < 20; i++) {
+        cin >> *ptr++;
+    }
+
+    ptr = arr;
+    for (i = 0; i < 20; i++) {
+        sum += *ptr++;
+    }
+
+    cout << "The sum of all the elements is: " << sum << endl;
+
+    return 0;
+}
