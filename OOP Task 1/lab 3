@@ -12,13 +12,13 @@ int main() {
     cin >> customerId;
 
     cout << "Enter customer name: ";
-    cin.ignore();  // To ignore any remaining newline character in the input buffer
+    cin.ignore();  
     getline(cin, customerName);
 
     cout << "Enter units consumed: ";
     cin >> unitsConsumed;
 
-    // Calculate the basic amount based on units consumed
+    
     if (unitsConsumed <= 100) {
         totalAmount = unitsConsumed * 2.5;
     } else if (unitsConsumed <= 200) {
