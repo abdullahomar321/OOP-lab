@@ -1,0 +1,24 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    string name;
+    float avg,sum,marks;
+    
+    for(int i=1;i<5;i++){
+        cout<<"Enter name"<<endl;
+        cin>>name;
+        cout<<"Enter marks"<<endl;
+        cin>>marks;
+        sum=sum+marks;
+    }
+    avg=sum/5;
+    
+    cout<<fixed<<setprecision(2)<<avg<<endl;
+    
+    
+    return 0;
+}
