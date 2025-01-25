@@ -1,0 +1,37 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    string moviename;
+    int adultprice,childprice,adultsold,childsold;
+    int revenue;
+    int donate;
+    int amountgiven;
+    
+    cout<<"Enter the movie name"<<endl;
+    cin>>moviename;
+    cout<<"Enter price for adults' tickets"<<endl;
+    cin>>adultprice;
+    cout<<"How many sold?"<<endl;
+    cin>>adultsold;
+    cout<<"Enter price for children's tickets"<<endl;
+    cin>>childprice;
+    cout<<"How many sold?";
+    cin>>childsold;
+    cout<<"Enter cut to be donated to charity"<<endl;
+    cin>>donate;
+    cout<<"Revenue calculation...."<<endl;
+    revenue=(adultsold*adultprice)+(childsold*childprice);
+    cout<<"Amount to charity "<<endl;
+    amountgiven=revenue*(100-donate);
+    cout<<"amountgiven to charity "<<amountgiven<<endl;
+    cout<<"Cut to charity is "<<donate<<endl;
+    cout<<"Total revenue is "<<revenue<<endl;
+    cout<<"Total tickets sold "<<adultsold+childsold<<endl;
+    
+    
+    return 0;
+}
