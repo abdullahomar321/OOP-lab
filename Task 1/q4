@@ -1,0 +1,22 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    float weight;
+    float pounds;
+    
+    cout<<"Enter weight in kilos"<<endl;
+    cin>>weight;
+    
+    pounds=2.2*weight;
+    
+    cout<<fixed<<setprecision(2)<<pounds<<endl;
+    
+   
+   
+
+    return 0;
+}
