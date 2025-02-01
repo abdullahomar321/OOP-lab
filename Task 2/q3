@@ -1,0 +1,54 @@
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
+
+int main() {
+    int initial_size = 5;
+    int current_size = initial_size;
+    int count = 0;
+    int *arr = new int[current_size];
+    
+    cout << "Enter integers to add to the array (enter -1 to stop):" << endl;
+    
+    while (true) {
+        int num;
+        cin >> num;
+        
+        if (num == -1) {
+            break;
+        }
+
+        if (count >= current_size) {
+            if (count >= current_size * 2) {
+                current_size *= 2;
+                int *new_arr = new int[current_size];
+                for (int i = 0; i < count; ++i) {
+                    new_arr[i] = arr[i];
+                }
+                delete[] arr;
+                arr = new_arr;
+            }
+        }
+
+        arr[count] = num;
+        count++;
+    }
+
+    int *final_arr = new int[count];
+    for (int i = 0; i < count; ++i) {
+        final_arr[i] = arr[i];
+    }
+    delete[] arr;
+    arr = final_arr;
+
+    cout << "Final array with " << count << " elements: ";
+    for (int i = 0; i < count; ++i) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    delete[] arr;
+
+    return 0;
+}
