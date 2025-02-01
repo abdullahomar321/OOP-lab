@@ -1,0 +1,41 @@
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
+
+void* addToArray(void* array, int size) {
+    int* intArray = static_cast<int*>(array);
+
+    for (int i = 0; i < size; ++i) {
+        intArray[i] += 10;
+    }
+
+    return array;
+}
+
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        cout << "Please provide integers as command line arguments." << endl;
+        return 1;
+    }
+
+    int size = argc - 1;
+    int* arr = new int[size];
+
+    for (int i = 0; i < size; ++i) {
+        arr[i] = atoi(argv[i + 1]);
+    }
+
+    void* modifiedArray = addToArray(arr, size);
+
+    int* resultArray = static_cast<int*>(modifiedArray);
+
+    cout << "Modified array: ";
+    for (int i = 0; i < size; ++i) {
+        cout << resultArray[i] << " ";
+    }
+    cout << endl;
+
+    delete[] arr;
+    return 0;
+}
