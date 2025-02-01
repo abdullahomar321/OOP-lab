@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+struct Employee {
+    int id;
+    string name;
+};
+
+int main() {
+    int N;
+    cout << "Enter the number of employees: ";
+    cin >> N;
+
+    Employee employees[N];
+
+    for (int i = 0; i < N; ++i) {
+        cout << "Enter ID for employee " << i + 1 << ": ";
+        cin >> employees[i].id;
+        cout << "Enter name for employee " << i + 1 << ": ";
+        cin >> employees[i].name;
+    }
+
+    for (int i = 0; i < N - 1; ++i) {
+        for (int j = i + 1; j < N; ++j) {
+            if (employees[i].id > employees[j].id || (employees[i].id == employees[j].id && employees[i].name[0] > employees[j].name[0])) {
+                Employee temp = employees[i];
+                employees[i] = employees[j];
+                employees[j] = temp;
+            }
+        }
+    }
+
+    cout << "\nEmployees sorted by ID and first character of name:\n";
+    for (int i = 0; i < N; ++i) {
+        cout << "ID: " << employees[i].id << ", Name: " << employees[i].name << endl;
+    }
+
+    for (int i = 0; i < N - 1; ++i) {
+        for (int j = i + 1; j < N; ++j) {
+            if (employees[i].name[0] > employees[j].name[0]) {
+                Employee temp = employees[i];
+                employees[i] = employees[j];
+                employees[j] = temp;
+            }
+        }
+    }
+
+    cout << "\nEmployees sorted by the first character of the name:\n";
+    for (int i = 0; i < N; ++i) {
+        cout << "ID: " << employees[i].id << ", Name: " << employees[i].name << endl;
+    }
+
+    return 0;
+}
