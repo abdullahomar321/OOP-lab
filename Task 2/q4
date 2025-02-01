@@ -1,0 +1,51 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+struct Organisation {
+    string organisation_name;
+    int organisation_number;
+
+    struct Employee {
+        int employee_id;
+        string name;
+        double salary;
+    };
+};
+
+int main() {
+    Organisation org;
+
+    cout << "Enter organisation name: ";
+    cin >> org.organisation_name;
+    
+    cout << "Enter organisation number: ";
+    cin >> org.organisation_number;
+    
+    Organisation::Employee emp;
+    
+    cout << "Enter employee ID: ";
+    cin >> emp.employee_id;
+    
+    cout << "Enter employee name: ";
+    cin >> emp.name;
+    
+    cout << "Enter employee salary: ";
+    cin >> emp.salary;
+    
+    cout << endl;
+    
+    cout << "Organisation Details:" << endl;
+    cout << "Organisation Name: " << org.organisation_name << endl;
+    cout << "Organisation Number: " << org.organisation_number << endl;
+    
+    cout << endl;
+    
+    cout << "Employee Details:" << endl;
+    cout << "Employee ID: " << emp.employee_id << endl;
+    cout << "Employee Name: " << emp.name << endl;
+    cout << "Employee Salary: " << emp.salary << endl;
+
+    return 0;
+}
