@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Subject {
+    string subject_name;
+};
+
+struct Student {
+    int id;
+    vector<Subject> subjects;  // Vector of subjects
+};
+
+int main() {
+    int N;
+    cout << "Enter the number of students: ";
+    cin >> N;
+
+    vector<Student> students(N);  // Dynamic array of students
+
+    for (int i = 0; i < N; ++i) {
+        cout << "Enter ID for student " << i + 1 << ": ";
+        cin >> students[i].id;
+
+        int num_subjects;
+        cout << "Enter number of subjects for student " << i + 1 << ": ";
+        cin >> num_subjects;
+
+        for (int j = 0; j < num_subjects; ++j) {
+            Subject subj;
+            cout << "Enter subject " << j + 1 << " for student " << i + 1 << ": ";
+            cin >> subj.subject_name;
+            students[i].subjects.push_back(subj);
+        }
+    }
+
+    cout << "\nStudent Information:\n";
+    for (const auto& student : students) {
+        cout << "ID: " << student.id << "\nSubjects: ";
+        for (const auto& subj : student.subjects) {
+            cout << subj.subject_name << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
