@@ -1,0 +1,73 @@
+#include <iostream>
+#include <stdexcept>
+
+class Matrix {
+private:
+    int **matrix;
+    int rows, cols;
+
+public:
+    Matrix() : rows(0), cols(0), matrix(nullptr) {}
+
+    Matrix(int r, int c) : rows(r), cols(c) {
+        matrix = new int*[rows];
+        for (int i = 0; i < rows; ++i) {
+            matrix[i] = new int[cols]{0};
+        }
+    }
+
+    Matrix(const Matrix &other) : rows(other.rows), cols(other.cols) {
+        matrix = new int*[rows];
+        for (int i = 0; i < rows; ++i) {
+            matrix[i] = new int[cols];
+            for (int j = 0; j < cols; ++j) {
+                matrix[i][j] = other.matrix[i][j];
+            }
+        }
+    }
+
+    ~Matrix() {
+        for (int i = 0; i < rows; ++i) {
+            delete[] matrix[i];
+        }
+        delete[] matrix;
+    }
+
+    void inputMatrix() {
+        if (rows == 0 || cols == 0) {
+            throw std::invalid_argument("Matrix size is not defined.");
+        }
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                std::cin >> matrix[i][j];
+            }
+        }
+    }
+
+    void displayMatrix() const {
+        if (rows == 0 || cols == 0) {
+            std::cout << "Matrix is empty.\n";
+            return;
+        }
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                std::cout << matrix[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    int getRows() const { return rows; }
+    int getCols() const { return cols; }
+};
+
+int main() {
+    Matrix m1;
+    m1.displayMatrix();
+    Matrix m2(2, 3);
+    m2.inputMatrix();
+    m2.displayMatrix();
+    Matrix m3 = m2;
+    m3.displayMatrix();
+    return 0;
+}
