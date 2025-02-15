@@ -1,0 +1,41 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+class account{
+  public:
+  float balance;
+  
+  account(){
+    balance=0.00;
+  }
+  
+  void setbalance(float b){
+    balance=b;
+    return;
+  }
+  
+  float credit(float c){
+      return balance+c;
+  }
+  
+  float withdraw(float w){
+      return balance-w;
+  }
+  
+  float show(){
+      return balance;
+  }
+  
+};
+
+int main()
+{
+    account obj;
+    obj.setbalance(9167000000.8978765);
+    cout<<fixed<<setprecision(2)<<obj.credit(45000)<<endl;
+    cout<<fixed<<setprecision(2)<<obj.withdraw(60000)<<endl;
+    cout<<fixed<<setprecision(2)<<obj.show()<<endl;
+
+    return 0;
+}
