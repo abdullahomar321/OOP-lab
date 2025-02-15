@@ -1,0 +1,76 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Book {
+  private:
+    string author;
+    string title;
+    double price;
+    string publisher;
+    int stock;
+
+  public:
+    Book(string a, string t, double p, string pub, int s) {
+        author = a;
+        title = t;
+        price = p;
+        publisher = pub;
+        stock = s;
+    }
+
+    bool isAvailable(string t, string a) {
+        return title == t && author == a;
+    }
+
+    void displayDetails() {
+        cout << "Title: " << title << "\nAuthor: " << author << "\nPrice: " << price << "\nPublisher: " << publisher << "\nStock: " << stock << endl;
+    }
+
+    bool sellBook(int qty) {
+        if (qty <= stock) {
+            stock -= qty;
+            return true;
+        }
+        return false;
+    }
+};
+
+int main() {
+    Book books[] = {
+        Book("Author1", "Book1", 15.5, "Publisher1", 10),
+        Book("Author2", "Book2", 20.0, "Publisher2", 5),
+        Book("Author3", "Book3", 12.0, "Publisher3", 2)
+    };
+    
+    string title, author;
+    int qty;
+    bool found = false;
+
+    cout << "Enter book title: ";
+    cin >> title;
+    cout << "Enter author: ";
+    cin >> author;
+
+    for (int i = 0; i < 3; i++) {
+        if (books[i].isAvailable(title, author)) {
+            found = true;
+            books[i].displayDetails();
+            cout << "Enter number of copies: ";
+            cin >> qty;
+            if (books[i].sellBook(qty)) {
+                cout << "Total cost: " << qty * books[i].price << endl;
+            } else {
+                cout << "Required copies not in stock" << endl;
+            }
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "Book not available" << endl;
+    }
+
+    return 0;
+}
+
