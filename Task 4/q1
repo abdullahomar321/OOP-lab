@@ -1,0 +1,34 @@
+#include <iostream>
+using namespace std;
+
+class circle{
+  public:
+  int radius;
+  
+  circle(){
+      radius=0;
+  }
+  void setradius(int r){
+      radius=r;
+      return;
+  }
+  
+  int getArea(){
+      return 3.142*radius*radius;
+  }
+  
+  int getPerimetre(){
+      return 2*3.142*radius;
+  }
+  
+};
+
+int main()
+{
+    circle obj;
+    obj.setradius(10);
+    cout<<obj.getPerimetre()<<endl;
+    cout<<obj.getArea()<<endl;
+
+    return 0;
+}
