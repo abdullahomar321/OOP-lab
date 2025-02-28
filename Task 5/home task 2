@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+
+class Car {
+public:
+    int engineHorsepower;
+    int seatingCapacity;
+    int noOfSpeakers;
+
+   
+    void setEngineHorsepower(int horsepower) const {
+        const_cast<Car*>(this)->engineHorsepower = horsepower;
+    }
+
+    void setSeatingCapacity(int capacity) const {
+        const_cast<Car*>(this)->seatingCapacity = capacity;
+    }
+
+    void setNoOfSpeakers(int speakers) const {
+        const_cast<Car*>(this)->noOfSpeakers = speakers;
+    }
+
+
+    void displayCarDetails() const {
+        cout << "Engine Horsepower: " << engineHorsepower << endl;
+        cout << "Seating Capacity: " << seatingCapacity << endl;
+        cout << "Number of Speakers: " << noOfSpeakers << endl;
+    }
+};
+
+int main() {
+    Car myCar;
+
+    
+    myCar.setEngineHorsepower(300);
+    myCar.setSeatingCapacity(5);
+    myCar.setNoOfSpeakers(6);
+
+    myCar.displayCarDetails();
+
+    return 0;
+}
