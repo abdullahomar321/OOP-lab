@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+class Book {
+public:
+    string title;
+    string author;
+    string isbn;
+    Book(string t, string a, string i) : title(t), author(a), isbn(i) {}
+    void displayInfo() const {
+        cout << "Title: " << title << ", Author: " << author << ", ISBN: " << isbn << endl;
+    }
+};
+
+class Catalog {
+private:
+    Book* books[100];  // Fixed-size array to store books (maximum 100 books)
+    int bookCount;
+public:
+    Catalog() : bookCount(0) {}
+    void addBookToCatalog(Book* book) {
+        if (bookCount < 100) {
+            books[bookCount++] = book;
+        }
+    }
+    Book* findBookByISBN(const string& isbn) {
+        for (int i = 0; i < bookCount; ++i) {
+            if (books[i]->isbn == isbn) {
+                return books[i];
+            }
+        }
+        return nullptr;
+    }
+    void displayCatalog() {
+        if (bookCount == 0) {
+            cout << "Catalog is empty." << endl;
+            return;
+        }
+        for (int i = 0; i < bookCount; ++i) {
+            cout << "ISBN: " << books[i]->isbn << " -> ";
+            books[i]->displayInfo();
+        }
+    }
+};
+
+class Library {
+private:
+    Catalog catalog;
+    vector<Book*> books;
+public:
+    string name;
+    string address;
+    Library(string n, string a) : name(n), address(a) {}
+    void addBook(Book* book) {
+        books.push_back(book);
+        catalog.addBookToCatalog(book);
+    }
+    void removeBook(const string& isbn) {
+        for (auto it = books.begin(); it != books.end(); ++it) {
+            if ((*it)->isbn == isbn) {
+                books.erase(it);
+                break;
+            }
+        }
+    }
+    Book* findBookInCatalog(const string& isbn) {
+        return catalog.findBookByISBN(isbn);
+    }
+    void showCatalog() {
+        catalog.displayCatalog();
+    }
+    void displayLibraryInfo() {
+        cout << "Library Name: " << name << ", Address: " << address << endl;
+    }
+};
+
+int main() {
+    Library myLibrary("Central Library", "123 Library St");
+    Book* book1 = new Book("The Great Gatsby", "F. Scott Fitzgerald", "9780743273565");
+    Book* book2 = new Book("1984", "George Orwell", "9780451524935");
+    Book* book3 = new Book("To Kill a Mockingbird", "Harper Lee", "9780061120084");
+    myLibrary.addBook(book1);
+    myLibrary.addBook(book2);
+    myLibrary.addBook(book3);
+    myLibrary.displayLibraryInfo();
+    cout << "\nCatalog of books:" << endl;
+    myLibrary.showCatalog();
+    string searchIsbn = "9780451524935";
+    cout << "\nSearching for book with ISBN " << searchIsbn << " in catalog..." << endl;
+    Book* foundBook = myLibrary.findBookInCatalog(searchIsbn);
+    if (foundBook) {
+        cout << "Found: ";
+        foundBook->displayInfo();
+    } else {
+        cout << "Book not found." << endl;
+    }
+    return 0;
+}
