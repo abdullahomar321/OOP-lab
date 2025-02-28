@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+class Engine {
+public:
+    bool isRunning;
+    
+    Engine() : isRunning(false) {}
+    
+    void start() {
+        if (!isRunning) {
+            isRunning = true;
+            cout << "Engine started" << endl;
+        } else {
+            cout << "Engine is already running" << endl;
+        }
+    }
+
+    void stop() {
+        if (isRunning) {
+            isRunning = false;
+            cout << "Engine stopped" << endl;
+        } else {
+            cout << "Engine is already stopped" << endl;
+        }
+    }
+};
+
+class Car {
+private:
+    Engine engine;  // Composition: Car has an Engine object
+    
+public:
+    void startCar() {
+        engine.start();
+    }
+
+    void stopCar() {
+        engine.stop();
+    }
+};
+
+int main() {
+    Car car;  // Create a Car object
+    car.startCar();  // Start the car (which starts the engine)
+    car.stopCar();   // Stop the car (which stops the engine)
+
+    return 0;
+}
