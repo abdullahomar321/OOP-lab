@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+class Engine {
+public:
+    bool isRunning;
+    
+    Engine() : isRunning(false) {}
+    
+    void start() {
+        if (!isRunning) {
+            isRunning = true;
+            cout << "Engine started" << endl;
+        } else {
+            cout << "Engine is already running" << endl;
+        }
+    }
+
+    void stop() {
+        if (isRunning) {
+            isRunning = false;
+            cout << "Engine stopped" << endl;
+        } else {
+            cout << "Engine is already stopped" << endl;
+        }
+    }
+};
+
+class Car {
+private:
+    Engine engine;  
+    
+public:
+    void startCar() {
+        engine.start();
+    }
+
+    void stopCar() {
+        engine.stop();
+    }
+};
+
+int main() {
+    Car car;  
+    car.startCar();  
+    car.stopCar();   
+
+    return 0;
+}
