@@ -1,0 +1,94 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+class CoffeeShop {
+public:
+    string name;
+    string menu[5] = {"Coffee", "Tea", "Pastry", "Sandwich", "Muffin"};
+    double prices[5] = {2.5, 1.8, 3.0, 4.0, 2.2};
+    vector<string> orders;
+
+    void addOrder(string item) {
+        bool itemFound = false;
+        for (int i = 0; i < 5; ++i) {
+            if (menu[i] == item) {
+                orders.push_back(item);
+                itemFound = true;
+                break;
+            }
+        }
+        if (!itemFound) {
+            cout << "This item is currently unavailable!" << endl;
+        }
+    }
+
+    void fulfillOrder() {
+        if (orders.empty()) {
+            cout << "All orders have been fulfilled" << endl;
+        } else {
+            cout << "The " << orders.front() << " is ready!" << endl;
+            orders.erase(orders.begin());
+        }
+    }
+
+    void listOrders() {
+        if (orders.empty()) {
+            cout << "No orders placed." << endl;
+        } else {
+            cout << "Orders taken: ";
+            for (const auto& order : orders) {
+                cout << order << " ";
+            }
+            cout << endl;
+        }
+    }
+
+    double dueAmount() {
+        double total = 0.0;
+        for (const auto& order : orders) {
+            for (int i = 0; i < 5; ++i) {
+                if (menu[i] == order) {
+                    total += prices[i];
+                    break;
+                }
+            }
+        }
+        return total;
+    }
+
+    string cheapestItem() {
+        int minIndex = 0;
+        for (int i = 1; i < 5; ++i) {
+            if (prices[i] < prices[minIndex]) {
+                minIndex = i;
+            }
+        }
+        return menu[minIndex];
+    }
+
+    void drinksOnly() {
+        cout << "Drinks available: Coffee, Tea" << endl;
+    }
+
+    void foodOnly() {
+        cout << "Food available: Pastry, Sandwich, Muffin" << endl;
+    }
+};
+
+int main() {
+    CoffeeShop myShop;
+    myShop.addOrder("Coffee");
+    myShop.addOrder("Pastry");
+    myShop.addOrder("Tea");
+    myShop.addOrder("Burger");
+    myShop.listOrders();
+    myShop.fulfillOrder();
+    myShop.listOrders();
+    cout << "Total due: $" << myShop.dueAmount() << endl;
+    cout << "Cheapest item: " << myShop.cheapestItem() << endl;
+    myShop.drinksOnly();
+    myShop.foodOnly();
+    return 0;
+}
