@@ -1,0 +1,122 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Employee {
+protected:
+    int id;
+    string name;
+public:
+    Employee(int empId, string empName) : id(empId), name(empName) {}
+    virtual void displayInfo() {
+        cout << "Employee ID: " << id << ", Name: " << name << endl;
+    }
+    virtual ~Employee() {}
+};
+
+class IOrderTaker {
+public:
+    virtual void takeOrder(const string& order) = 0;
+    virtual ~IOrderTaker() {}
+};
+
+class IOrderPreparer {
+public:
+    virtual void prepareOrder(const string& order) = 0;
+    virtual ~IOrderPreparer() {}
+};
+
+class IBiller {
+public:
+    virtual void generateBill(double amount) = 0;
+    virtual ~IBiller() {}
+};
+
+class Waiter : public Employee, public IOrderTaker {
+public:
+    Waiter(int empId, string empName) : Employee(empId, empName) {}
+    void takeOrder(const string& order) override {
+        cout << "Waiter " << name << " takes order: " << order << endl;
+    }
+};
+
+class Chef : public Employee, public IOrderPreparer {
+public:
+    Chef(int empId, string empName) : Employee(empId, empName) {}
+    void prepareOrder(const string& order) override {
+        cout << "Chef " << name << " is preparing: " << order << endl;
+    }
+};
+
+class Cashier : public Employee, public IBiller {
+public:
+    Cashier(int empId, string empName) : Employee(empId, empName) {}
+    void generateBill(double amount) override {
+        cout << "Cashier " << name << " generated bill: $" << amount << endl;
+    }
+};
+
+class Manager : public Employee, public IOrderTaker, public IBiller {
+public:
+    Manager(int empId, string empName) : Employee(empId, empName) {}
+    void takeOrder(const string& order) override {
+        cout << "Manager " << name << " takes special order: " << order << endl;
+    }
+    void generateBill(double amount) override {
+        cout << "Manager " << name << " generated discounted bill: $" << amount * 0.9 << " (10% off)" << endl;
+    }
+};
+
+class Menu {
+protected:
+    vector<pair<string, double>> items;
+public:
+    virtual void addItem(string name, double price) {
+        items.push_back({name, price});
+    }
+    virtual double calculateTotal() = 0;
+    virtual ~Menu() {}
+};
+
+class FoodMenu : public Menu {
+public:
+    double calculateTotal() override {
+        double total = 0;
+        for (auto& item : items) total += item.second;
+        return total;
+    }
+};
+
+class BeverageMenu : public Menu {
+public:
+    double calculateTotal() override {
+        double total = 0;
+        for (auto& item : items) total += item.second * 1.1;
+        return total;
+    }
+};
+
+int main() {
+    Waiter waiter(101, "Alice");
+    Chef chef(102, "Bob");
+    Cashier cashier(103, "Charlie");
+    Manager manager(104, "David");
+    
+    waiter.takeOrder("Pasta");
+    chef.prepareOrder("Pasta");
+    cashier.generateBill(20.0);
+    manager.takeOrder("Steak Special");
+    manager.generateBill(50.0);
+    
+    FoodMenu foodMenu;
+    foodMenu.addItem("Burger", 10.0);
+    foodMenu.addItem("Pizza", 15.0);
+    cout << "Food Menu Total: $" << foodMenu.calculateTotal() << endl;
+    
+    BeverageMenu beverageMenu;
+    beverageMenu.addItem("Soda", 5.0);
+    beverageMenu.addItem("Coffee", 4.0);
+    cout << "Beverage Menu Total (with tax): $" << beverageMenu.calculateTotal() << endl;
+    
+    return 0;
+}
