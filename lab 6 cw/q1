@@ -1,0 +1,163 @@
+#include <iostream>
+#include<vector>
+#include <string>
+using namespace std;
+
+class BankAccount{
+  public:
+  float balance;
+  string accountnum;
+  
+  BankAccount(float b,string num){
+      balance=b;
+      accountnum=num;
+  }
+  
+  void deposit(float amount){
+      balance=balance+amount;
+      cout<<"....Loading"<<endl;
+      cout<<"Amount deposited"<<endl;
+      return;
+  }
+  
+  float withdraw(float cash){
+      if(cash>0 && cash<balance){
+          return balance=balance-cash;
+      }else{
+          cout<<"Invalid amount..."<<endl;
+      }
+      
+  }
+  float getbalance(){
+      return balance;
+  }
+  
+};
+
+class SavingAccount:public BankAccount{
+  private:
+  double interestrate;
+  
+  SavingAccount(float b,string acc,double rate){
+      balance=b;
+      accountnum=acc;
+      interestrate=rate;
+  }
+  
+  float applymonthlyinterest(double rate=0.03){
+      double interest;
+      double t;
+      cout<<"Enter time period"<<endl;
+      cin>>t;
+      interest=(balance*rate*t)/100;
+      return interest;
+  }
+};
+
+class CheckingAccount:public BankAccount{
+    private:
+    double overdraft;
+    
+    public:
+    
+    CheckingAccount(float b,string acc,double over){
+        balance=b;
+        accountnum=acc;
+        overdraft=over;
+    }
+    
+    void overdraft(double overdraft){
+        if(overdraft>20000){
+            cout<<"Limit exceeded"<<endl;
+        }else{
+             balance=balance-overdraft;
+        }
+        
+    }
+};
+
+class BusinessAccount:public BankAccount{
+  private:
+  double taxrate;
+  
+  public:
+  BusinessAccount(float b,string acc,double tax){
+      balance=b;
+      accountnum=acc;
+      taxrate=tax;
+  }
+  void withhold(float amount){
+     double tax=amount*taxrate;
+     double net=amount-tax;
+     balance=balance+net;
+     
+  }
+};
+
+class User{
+    public:
+    string name;
+    
+    User(string n){
+        name=n;
+    }
+    ~User() {}
+};
+
+class Customer:public User{
+private:
+vector<BankAccount*>accounts;
+
+Customer(string userName, vector<BankAccount*> accs) : User(userName), accounts(accs) {}
+
+void deposit(BankAccount* account,double amount){
+    account->deposit(amount);
+}
+
+void withdraw(BankAccount* account,double amount){
+    account->withdraw(amount);
+}
+};
+
+class Teller:public User{
+  public:
+  vector<BankAccount*>accounts;
+  char choice;
+  
+  Teller(string userName, vector<BankAccount*> accs) : User(userName), accounts(accs) {}
+  
+  void freeze(char choice){
+      if(choice=='f'){
+          cout<<"Account Freezed"<<endl;
+      }
+      else{
+          cout<<"account not frozen"<<endl;
+      }
+  }
+  
+  void deposit(BankAccount* account,double amount){
+    account->deposit(amount);  
+  }
+  void withdraw(BankAccount* account,double amount){
+    account->withdraw(amount);
+}
+  
+};
+
+class Manager : public Teller {
+public:
+    Manager(string userName) : Teller(userName) {}
+
+    void overrideLimit(CheckingAccount* account, double newLimit) {
+        account->withdraw(newLimit);
+        cout <<"Overdraft limit updated to $"<<newLimit<<endl;
+    }
+};
+
+
+
+int main()
+{
+
+    return 0;
+}
