@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+
+class Student {
+protected:
+    string name;
+    int rollNumber;
+public:
+    Student(string n, int roll) : name(n), rollNumber(roll) {}
+    void displayStudentInfo() {
+        cout << "Student Name: " << name << ", Roll Number: " << rollNumber << endl;
+    }
+};
+
+class Marks : public Student {
+protected:
+    int course1, course2, course3;
+public:
+    Marks(string n, int roll, int m1, int m2, int m3) : Student(n, roll), course1(m1), course2(m2), course3(m3) {}
+    void displayMarks() {
+        cout << "Marks Obtained - Course 1: " << course1 << ", Course 2: " << course2 << ", Course 3: " << course3 << endl;
+    }
+};
+
+class Result : public Marks {
+public:
+    Result(string n, int roll, int m1, int m2, int m3) : Marks(n, roll, m1, m2, m3) {}
+    void displayResult() {
+        int total = course1 + course2 + course3;
+        double average = total / 3.0;
+        cout << "Total Marks: " << total << "\nAverage Marks: " << average << endl;
+    }
+};
+
+int main() {
+    Result student("John Doe", 101, 85, 90, 78);
+    
+    student.displayStudentInfo();
+    student.displayMarks();
+    student.displayResult();
+    
+    return 0;
+}
