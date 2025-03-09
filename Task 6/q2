@@ -1,0 +1,73 @@
+#include <iostream>
+using namespace std;
+
+class Vehicles {
+protected:
+    double price;
+public:
+    Vehicles(double p) : price(p) {}
+    virtual void display() {
+        cout << "Price: $" << price << endl;
+    }
+};
+
+class Car : public Vehicles {
+protected:
+    int seatingCapacity;
+    int numDoors;
+    string fuelType;
+public:
+    Car(double p, int seat, int doors, string fuel) : Vehicles(p), seatingCapacity(seat), numDoors(doors), fuelType(fuel) {}
+    void display() override {
+        Vehicles::display();
+        cout << "Seating Capacity: " << seatingCapacity << ", Number of Doors: " << numDoors << ", Fuel Type: " << fuelType << endl;
+    }
+};
+
+class Motorcycle : public Vehicles {
+protected:
+    int numCylinders;
+    int numGears;
+    int numWheels;
+public:
+    Motorcycle(double p, int cylinders, int gears, int wheels) : Vehicles(p), numCylinders(cylinders), numGears(gears), numWheels(wheels) {}
+    void display() override {
+        Vehicles::display();
+        cout << "Number of Cylinders: " << numCylinders << ", Number of Gears: " << numGears << ", Number of Wheels: " << numWheels << endl;
+    }
+};
+
+class Audi : public Car {
+private:
+    string modelType;
+public:
+    Audi(double p, int seat, int doors, string fuel, string model) : Car(p, seat, doors, fuel), modelType(model) {}
+    void display() override {
+        Car::display();
+        cout << "Model Type: " << modelType << endl;
+    }
+};
+
+class Yamaha : public Motorcycle {
+private:
+    string makeType;
+public:
+    Yamaha(double p, int cylinders, int gears, int wheels, string make) : Motorcycle(p, cylinders, gears, wheels), makeType(make) {}
+    void display() override {
+        Motorcycle::display();
+        cout << "Make Type: " << makeType << endl;
+    }
+};
+
+int main() {
+    Audi myAudi(50000, 5, 4, "Petrol", "A4");
+    Yamaha myYamaha(15000, 2, 6, 2, "R1");
+    
+    cout << "Audi Car Details:\n";
+    myAudi.display();
+    
+    cout << "\nYamaha Motorcycle Details:\n";
+    myYamaha.display();
+    
+    return 0;
+}
