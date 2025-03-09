@@ -1,0 +1,79 @@
+#include <iostream>
+#include<vector>
+#include <string>
+using namespace std;
+
+class MediaFile{
+  protected:
+  string filePath;
+  double filesize;
+  
+  public:
+  
+   MediaFile(string path,double size){
+       filesize=size;
+       filePath=path;
+   }
+   
+   virtual void play(){
+       cout<<"...Playing"<<endl;
+   }
+   virtual void stop(){
+       cout<<".....Stop"<<endl;
+   }
+};
+
+class VisualMedia : virtual public MediaFile {
+protected:
+    int resolutionX, resolutionY;
+public:
+    VisualMedia(string path, double size, int x, int y) : MediaFile(path, size), resolutionX(x), resolutionY(y) {}
+};
+
+class AudioMedia : virtual public MediaFile {
+protected:
+    int sampleRate;
+public:
+    AudioMedia(string path, double size, int rate) : MediaFile(path, size), sampleRate(rate) {}
+};
+
+class VideoFile : public VisualMedia, public AudioMedia {
+public:
+    VideoFile(string path, double size, int x, int y, int rate)
+        : MediaFile(path, size), VisualMedia(path, size, x, y), AudioMedia(path, size, rate) {}
+
+    void play() override {
+        cout << "Playing video file: " << filePath << " with resolution " << resolutionX << "x" << resolutionY << " and sample rate " << sampleRate << " Hz." << endl;
+    }
+};
+
+
+class ImageFile : public VisualMedia {
+public:
+    ImageFile(string path, double size, int x, int y) : VisualMedia(path, size, x, y) {}
+    void play() override { cout << "Displaying image: " << filePath << " with resolution " << resolutionX << "x" << resolutionY << endl; }
+};
+
+class AudioFile : public AudioMedia {
+public:
+    AudioFile(string path, double size, int rate) : AudioMedia(path, size, rate) {}
+    void play() override { cout << "Playing audio file: " << filePath << " at " << sampleRate << " Hz." << endl; }
+};
+
+
+int main()
+{
+     MediaFile* media1 = new VideoFile("video.mp4", 200, 1920, 1080, 44100);
+    MediaFile* media2 = new ImageFile("image.jpg", 5, 1920, 1080);
+    MediaFile* media3 = new AudioFile("song.mp3", 10, 44100);
+
+    media1->play();
+    media2->play();
+    media3->play();
+
+    delete media1;
+    delete media2;
+    delete media3;
+
+    return 0;
+}
