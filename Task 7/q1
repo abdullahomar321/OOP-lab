@@ -1,0 +1,113 @@
+#include <iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+class bankaccount{
+public:
+string accnum;
+float balance;
+string holder;
+char type;
+
+bankaccount(string num,float b,string h,char t){
+    accnum=num;
+    balance=b;
+    holder=h;
+    type=t;
+}
+
+virtual void withdraw(float amount){
+    if(amount<0 || amount>balance){
+        cout<<"Invalid entry"<<endl;
+    }else{
+        balance=balance-amount;
+    }
+    cout<<balance<<endl;
+    return;
+}
+
+virtual void deposit(float amount){
+    if(amount<0){
+        cout<<"Invalid entry"<<endl;
+    }else{
+        balance=balance+amount;
+    }
+    cout<<balance<<endl;
+    return;
+    
+}
+
+virtual void calculateinterest(float t){
+    int r=0.02;
+    int t;
+    cout<<"Enter time period"<<endl;
+    cin>>t;
+    cout<<(a*t*r)/100<<endl;
+    return;
+}
+
+virtual void printinfo(){
+    cout<<accnum<<endl;
+    cout<<balance<<endl;
+    cout<<holder<<endl;
+    cout<<type<<endl;
+    return;
+}
+    
+};
+
+class Savings:public bankaccount{
+    public:
+    float interestrate;
+    float minbal;
+    Savings(string num,float b,string name,float rate,float min):bankaccount(num,b,name,rate,'s'),interestrate(rate),minbal(min){}
+    
+    void withdraw(float amount)override{
+        if(balance-amount<minbal){
+            cout<<"Too large of a withdrawl";
+        }else{
+           balance=balance-amount; 
+        }
+    }
+    
+    void calculateinterest(float t)override{
+        float interest=(balance*interestrate*t)/100;
+        cout<<interest<<endl;
+    }
+    
+};
+
+class checking:public bankaccount{
+  public:
+  checking(float b,string num,string name,char t):bankaccount(b,num,name,'c'){}
+  void calculateinterest() override{
+      cout<<"No interest on checking accounts"<<endl;
+  }
+};
+
+class fixeddeposit:public bankaccount{
+  public:
+  string date;
+  float rate;
+  
+  fixeddeposit(string acc,string h,float b,char t,string d,float r):bankaccount(acc,h,b,t),date(d),rate(r){}
+  
+  void withdraw(float amount)override{
+      cout<<"Withdrawls arent allowed before this date"<<date<<endl;
+  }
+  
+  void calculateinterest(float t)override{
+      int interest=(b*t*rate)/100;
+      cout<<interest;
+  }
+  
+};
+
+
+int main()
+{
+    
+
+    return 0;
+}
