@@ -1,0 +1,110 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Media {
+protected:
+    string title, publicationDate, uniqueID, publisher;
+    bool isCheckedOut;
+public:
+    Media(string t, string pd, string id, string pub)
+        : title(t), publicationDate(pd), uniqueID(id), publisher(pub), isCheckedOut(false) {}
+
+    virtual void displayInfo() {
+        cout << title << " " << publicationDate << " " << uniqueID << " " << publisher << endl;
+    }
+
+    void checkOut() {
+        if (!isCheckedOut) {
+            isCheckedOut = true;
+            cout << "Checked out successfully" << endl;
+        } else {
+            cout << "Already checked out" << endl;
+        }
+    }
+
+    void returnItem() {
+        if (isCheckedOut) {
+            isCheckedOut = false;
+            cout << "Returned successfully" << endl;
+        } else {
+            cout << "Item was not checked out" << endl;
+        }
+    }
+
+    virtual ~Media() {}
+};
+
+class Book : public Media {
+private:
+    string author, ISBN;
+    int numberOfPages;
+public:
+    Book(string t, string pd, string id, string pub, string a, string isbn, int pages)
+        : Media(t, pd, id, pub), author(a), ISBN(isbn), numberOfPages(pages) {}
+
+    void displayInfo() override {
+        Media::displayInfo();
+        cout << "Book " << author << " " << ISBN << " " << numberOfPages << " pages" << endl;
+    }
+};
+
+class DVD : public Media {
+private:
+    string director, rating;
+    int duration;
+public:
+    DVD(string t, string pd, string id, string pub, string dir, int dur, string r)
+        : Media(t, pd, id, pub), director(dir), duration(dur), rating(r) {}
+
+    void displayInfo() override {
+        Media::displayInfo();
+        cout << "DVD " << director << " " << duration << " mins " << rating << endl;
+    }
+};
+
+class CD : public Media {
+private:
+    string artist, genre;
+    int numberOfTracks;
+public:
+    CD(string t, string pd, string id, string pub, string ar, int tracks, string g)
+        : Media(t, pd, id, pub), artist(ar), numberOfTracks(tracks), genre(g) {}
+
+    void displayInfo() override {
+        Media::displayInfo();
+        cout << "CD " << artist << " " << numberOfTracks << " tracks " << genre << endl;
+    }
+};
+
+// Overloaded search functions
+void search(string title) {
+    cout << "Searching by title: " << title << endl;
+}
+
+void search(int year) {
+    cout << "Searching by year: " << year << endl;
+}
+
+void searchByAuthor(string author) {
+    cout << "Searching by author: " << author << endl;
+}
+
+int main() {
+    Book b("C++ Primer", "2020", "B101", "Pearson", "Lippman", "978-0321714114", 970);
+    DVD d("Inception", "2010", "D202", "Warner Bros", "Christopher Nolan", 148, "PG-13");
+    CD c("Thriller", "1982", "C303", "Epic", "Michael Jackson", 9, "Pop");
+
+    b.displayInfo();
+    d.displayInfo();
+    c.displayInfo();
+
+    b.checkOut();
+    b.returnItem();
+
+    search("Inception");
+    search(2020);
+    searchByAuthor("Lippman");
+
+    return 0;
+}
