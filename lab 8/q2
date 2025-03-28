@@ -1,0 +1,38 @@
+#include <iostream>
+
+using namespace std;
+
+class Shape {
+private:
+    double area;
+
+public:
+    Shape() : area(0) {}
+    Shape(double a) : area(a) {}
+
+    double getArea() const { return area; }
+
+    Shape operator+(const Shape& other) const {
+        return Shape(area + other.area);
+    }
+
+    void display() const {
+        cout << "Area: " << area << endl;
+    }
+};
+
+int main() {
+    Shape shape1(25.5);
+    Shape shape2(30.2);
+    
+    Shape shape3 = shape1 + shape2;
+    
+    cout << "Shape 1: ";
+    shape1.display();
+    cout << "Shape 2: ";
+    shape2.display();
+    cout << "Shape 3 (Sum of Shape 1 and Shape 2): ";
+    shape3.display();
+    
+    return 0;
+}
