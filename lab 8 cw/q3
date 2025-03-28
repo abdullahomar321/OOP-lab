@@ -1,0 +1,137 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+class BigInteger {
+private:
+    vector<int> digits;
+    bool isNegative;
+
+    void trim() {
+        while (digits.size() > 1 && digits.back() == 0) {
+            digits.pop_back();
+        }
+        if (digits.size() == 1 && digits[0] == 0) {
+            isNegative = false;
+        }
+    }
+
+public:
+    BigInteger() : isNegative(false) { digits.push_back(0); }
+    BigInteger(const string& num) {
+        isNegative = (num[0] == '-');
+        for (int i = num.size() - 1; i >= (isNegative ? 1 : 0); --i) {
+            digits.push_back(num[i] - '0');
+        }
+        trim();
+    }
+
+    BigInteger operator+(const BigInteger& other) const {
+        if (isNegative == other.isNegative) {
+            BigInteger result;
+            result.isNegative = isNegative;
+            int carry = 0, sum = 0;
+            size_t maxSize = max(digits.size(), other.digits.size());
+            result.digits.resize(maxSize, 0);
+            
+            for (size_t i = 0; i < maxSize || carry; ++i) {
+                if (i == result.digits.size()) result.digits.push_back(0);
+                sum = carry + (i < digits.size() ? digits[i] : 0) + (i < other.digits.size() ? other.digits[i] : 0);
+                result.digits[i] = sum % 10;
+                carry = sum / 10;
+            }
+            result.trim();
+            return result;
+        }
+        return *this - (-other);
+    }
+
+    BigInteger operator-() const {
+        BigInteger neg = *this;
+        if (digits.size() != 1 || digits[0] != 0) {
+            neg.isNegative = !isNegative;
+        }
+        return neg;
+    }
+
+    BigInteger operator-(const BigInteger& other) const {
+        if (isNegative != other.isNegative) {
+            return *this + (-other);
+        }
+        if (*this < other) {
+            return -(other - *this);
+        }
+        BigInteger result;
+        result.isNegative = isNegative;
+        int borrow = 0, diff = 0;
+        result.digits.resize(digits.size(), 0);
+
+        for (size_t i = 0; i < digits.size(); i++) {
+            diff = digits[i] - (i < other.digits.size() ? other.digits[i] : 0) - borrow;
+            if (diff < 0) {
+                diff += 10;
+                borrow = 1;
+            } else {
+                borrow = 0;
+            }
+            result.digits[i] = diff;
+        }
+        result.trim();
+        return result;
+    }
+
+    bool operator==(const BigInteger& other) const {
+        return digits == other.digits && isNegative == other.isNegative;
+    }
+
+    bool operator!=(const BigInteger& other) const {
+        return !(*this == other);
+    }
+
+    bool operator<(const BigInteger& other) const {
+        if (isNegative != other.isNegative) {
+            return isNegative;
+        }
+        if (digits.size() != other.digits.size()) {
+            return (digits.size() < other.digits.size()) ^ isNegative;
+        }
+        for (int i = digits.size() - 1; i >= 0; --i) {
+            if (digits[i] != other.digits[i]) {
+                return (digits[i] < other.digits[i]) ^ isNegative;
+            }
+        }
+        return false;
+    }
+
+    bool operator>(const BigInteger& other) const { return other < *this; }
+    bool operator<=(const BigInteger& other) const { return !(other < *this); }
+    bool operator>=(const BigInteger& other) const { return !(*this < other); }
+
+    friend ostream& operator<<(ostream& os, const BigInteger& num) {
+        if (num.isNegative) os << "-";
+        for (int i = num.digits.size() - 1; i >= 0; --i) {
+            os << num.digits[i];
+        }
+        return os;
+    }
+
+    friend istream& operator>>(istream& is, BigInteger& num) {
+        string input;
+        is >> input;
+        num = BigInteger(input);
+        return is;
+    }
+};
+
+int main() {
+    BigInteger a("12345678901234567890");
+    BigInteger b("98765432109876543210");
+    cout << "a: " << a << "\n";
+    cout << "b: " << b << "\n";
+    cout << "a + b: " << (a + b) << "\n";
+    cout << "b - a: " << (b - a) << "\n";
+    return 0;
+}
