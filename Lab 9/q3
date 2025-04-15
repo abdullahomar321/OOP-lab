@@ -1,0 +1,43 @@
+#include<iostream>
+#include<string>
+using namespace std;
+class PatientRecord{
+private:
+    string name, id, dob, medicalHistory, currentTreatment;
+public:
+    PatientRecord(string n, string i, string d, string m, string t)
+        : name(n), id(i), dob(d), medicalHistory(m), currentTreatment(t) {}
+    string getPublicData() { return "Name: " + name + ", ID: " + id + ", DOB: " + dob; }
+    string getMedicalData() { return "Medical History: " + medicalHistory + ", Treatment: " + currentTreatment; }
+};
+class Doctor{
+public:
+    void updateMedicalHistory(PatientRecord& record, string history) {
+        cout << "Doctor updating medical history: " << history << endl;
+    }
+    void updateTreatment(PatientRecord& record, string treatment) {
+        cout << "Doctor updating treatment: " << treatment << endl;
+    }
+};
+class Billing{
+public:
+    void addBillingDetails(PatientRecord& record, string billingDetails) {
+        cout << "Billing staff adding billing details: " << billingDetails << endl;
+    }
+};
+class Receptionist{
+public:
+    void viewPublicData(PatientRecord& record) {
+        cout << record.getPublicData() << endl;
+    }
+};
+int main(){
+    PatientRecord record("John Doe", "123", "01/01/1990", "None", "Treatment 1");
+    Receptionist receptionist;
+    receptionist.viewPublicData(record);
+    Doctor doctor;
+    doctor.updateMedicalHistory(record, "History Updated");
+    Billing billing;
+    billing.addBillingDetails(record, "Billing Info");
+    return 0;
+}
