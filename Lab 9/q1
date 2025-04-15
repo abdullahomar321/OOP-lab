@@ -1,0 +1,76 @@
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+class Wallet{
+private:
+    double balance;
+    double max_daily_limit;
+    double daily_deposit;
+    double daily_withdrawal;
+public:
+    Wallet(double max_limit): balance(0), max_daily_limit(max_limit), daily_deposit(0), daily_withdrawal(0) {}
+    void deposit(double amount){
+        if(amount <= 0) throw invalid_argument("Deposit amount must be positive.");
+        if(daily_deposit + amount > max_daily_limit) throw invalid_argument("Deposit exceeds daily limit.");
+        balance += amount;
+        daily_deposit += amount;
+    }
+    void withdraw(double amount){
+        if(amount <= 0) throw invalid_argument("Withdrawal amount must be positive.");
+        if(balance - amount < 0) throw invalid_argument("Insufficient balance.");
+        if(daily_withdrawal + amount > max_daily_limit) throw invalid_argument("Withdrawal exceeds daily limit.");
+        balance -= amount;
+        daily_withdrawal += amount;
+    }
+    double get_balance(){
+        return balance;
+    }
+    void reset_daily_limits(){
+        daily_deposit = 0;
+        daily_withdrawal = 0;
+    }
+};
+
+class User{
+private:
+    string user_id;
+    string name;
+    Wallet wallet;
+public:
+    User(string id, string user_name, double max_limit): user_id(id), name(user_name), wallet(max_limit) {}
+    void deposit(double amount){
+        wallet.deposit(amount);
+    }
+    void withdraw(double amount){
+        wallet.withdraw(amount);
+    }
+    double get_balance(){
+        return wallet.get_balance();
+    }
+    void reset_daily_limits(){
+        wallet.reset_daily_limits();
+    }
+};
+
+int main(){
+    User user1("U001", "Alice", 1000);
+    User user2("U002", "Bob", 500);
+    try{
+        user1.deposit(500);
+        user1.withdraw(200);
+        user1.deposit(600);
+    }catch(const exception& e){
+        cout << e.what() << endl;
+    }
+    try{
+        user2.deposit(300);
+        user2.withdraw(100);
+        user2.withdraw(600);
+    }catch(const exception& e){
+        cout << e.what() << endl;
+    }
+    cout << "User 1 balance: " << user1.get_balance() << endl;
+    cout << "User 2 balance: " << user2.get_balance() << endl;
+    return 0;
+}
