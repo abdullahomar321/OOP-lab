@@ -1,0 +1,112 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <ctime>
+#include <stdexcept>
+
+using namespace std;
+
+class Logger {
+private:
+    vector<string> logs;
+    size_t max_logs;
+    
+    string formatLog(const string& severity, const string& message) {
+        time_t now = time(0);
+        char* dt = ctime(&now); // Get current time
+        dt[strlen(dt) - 1] = '\0'; // Remove the trailing newline character
+        return "[" + string(dt) + "] [" + severity + "] " + message;
+    }
+
+    void enforceMaxLogs() {
+        if (logs.size() > max_logs) {
+            logs.erase(logs.begin()); // Remove the oldest log
+        }
+    }
+
+public:
+    Logger(size_t max_size) : max_logs(max_size) {}
+
+    void logInfo(const string& message) {
+        string log_message = formatLog("INFO", message);
+        logs.push_back(log_message);
+        enforceMaxLogs();
+    }
+
+    void logWarning(const string& message) {
+        string log_message = formatLog("WARN", message);
+        logs.push_back(log_message);
+        enforceMaxLogs();
+    }
+
+    void logError(const string& message) {
+        string log_message = formatLog("ERROR", message);
+        logs.push_back(log_message);
+        enforceMaxLogs();
+    }
+
+    void log(const string& severity, const string& message) {
+        if (severity != "INFO" && severity != "WARN" && severity != "ERROR") {
+            throw invalid_argument("Invalid log severity");
+        }
+        string log_message = formatLog(severity, message);
+        logs.push_back(log_message);
+        enforceMaxLogs();
+    }
+
+    // Retrieve logs in a safe, read-only manner
+    vector<string> getLogs() const {
+        return logs;
+    }
+};
+
+class Auditor {
+private:
+    bool authenticated;
+
+public:
+    Auditor(bool auth_status) : authenticated(auth_status) {}
+
+    vector<string> retrieveLogs(const Logger& logger) {
+        if (!authenticated) {
+            throw runtime_error("Unauthorized access");
+        }
+        return logger.getLogs(); // Return a copy of the logs
+    }
+};
+
+int main() {
+    Logger logger(5); // Max logs = 5
+    logger.logInfo("Network module started.");
+    logger.logWarning("Database module has a slow query.");
+    logger.logError("File system error encountered.");
+    logger.logInfo("Network module ready.");
+    logger.logWarning("Low memory warning.");
+    logger.logError("Database connection failed.");
+
+    // Trying to add one more log, it will remove the oldest log (Network module started)
+    logger.logInfo("User login attempt.");
+
+    Auditor auditor(true); // The auditor is authenticated
+    try {
+        vector<string> logs = auditor.retrieveLogs(logger);
+        for (const auto& log : logs) {
+            cout << log << endl;
+        }
+    } catch (const runtime_error& e) {
+        cout << e.what() << endl;
+    }
+
+    // Demonstrating a user with unauthorized access
+    Auditor unauthenticated_auditor(false);
+    try {
+        vector<string> logs = unauthenticated_auditor.retrieveLogs(logger);
+        for (const auto& log : logs) {
+            cout << log << endl;
+        }
+    } catch (const runtime_error& e) {
+        cout << e.what() << endl;
+    }
+
+    return 0;
+}
