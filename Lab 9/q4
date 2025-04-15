@@ -1,0 +1,38 @@
+#include<iostream>
+using namespace std;
+class Flight{
+private:
+    string flightNumber;
+    int capacity, bookedSeats;
+public:
+    Flight(string f, int c): flightNumber(f), capacity(c), bookedSeats(0) {}
+    void bookSeat() {
+        if (bookedSeats < capacity) bookedSeats++;
+        else cout << "No available seats" << endl;
+    }
+    void cancelSeat() {
+        if (bookedSeats > 0) bookedSeats--;
+        else cout << "No booked seats to cancel" << endl;
+    }
+    void upgradeSeat() {
+        if (bookedSeats < capacity) bookedSeats++;
+        else cout << "No available seats for upgrade" << endl;
+    }
+    int getBookedSeats() { return bookedSeats; }
+};
+class Passenger{
+private:
+    string name, id;
+public:
+    Passenger(string n, string i): name(n), id(i) {}
+    void requestBooking(Flight& flight) { flight.bookSeat(); }
+    void requestCancellation(Flight& flight) { flight.cancelSeat(); }
+};
+int main(){
+    Flight flight1("AA123", 10);
+    Passenger p1("Alice", "P123");
+    p1.requestBooking(flight1);
+    p1.requestCancellation(flight1);
+    cout << "Booked Seats: " << flight1.getBookedSeats() << endl;
+    return 0;
+}
