@@ -1,0 +1,36 @@
+#include <iostream>
+using namespace std;
+
+class Shape {
+public:
+    virtual double getArea() const = 0;
+    virtual ~Shape() {}
+};
+
+class Rectangle : public Shape {
+    double length, width;
+public:
+    Rectangle(double l, double w) : length(l), width(w) {}
+    double getArea() const override {
+        return length * width;
+    }
+};
+
+class Triangle : public Shape {
+    double base, height;
+public:
+    Triangle(double b, double h) : base(b), height(h) {}
+    double getArea() const override {
+        return 0.5 * base * height;
+    }
+};
+
+int main() {
+    Rectangle rect(5, 3);
+    Triangle tri(4, 6);
+
+    cout << "Area of Rectangle: " << rect.getArea() << endl;
+    cout << "Area of Triangle: " << tri.getArea() << endl;
+
+    return 0;
+}
