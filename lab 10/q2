@@ -1,0 +1,81 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Product {
+    int id;
+    string name;
+    string associated_user;
+};
+
+void writeProductData(const string& filename) {
+    vector<Product> products = {
+        {1, "Product1", "Linus"},
+        {2, "Product2", "Alice"},
+        {3, "Product3", "Linus"},
+        {4, "Product4", "Bob"}
+    };
+
+    ofstream file(filename);
+    if (file.is_open()) {
+        for (const auto& prod : products) {
+            file << prod.id << "," << prod.name << "," << prod.associated_user << "\n";
+        }
+        file.close();
+    }
+}
+
+vector<Product> readProductData(const string& filename) {
+    vector<Product> products;
+    ifstream file(filename);
+    string line;
+    
+    while (getline(file, line)) {
+        Product prod;
+        size_t pos = 0;
+        pos = line.find(",");
+        prod.id = stoi(line.substr(0, pos));
+        line.erase(0, pos + 1);
+        
+        pos = line.find(",");
+        prod.name = line.substr(0, pos);
+        line.erase(0, pos + 1);
+        
+        prod.associated_user = line;
+        
+        products.push_back(prod);
+    }
+
+    file.close();
+    return products;
+}
+
+vector<string> fetchProductsByUser(const vector<Product>& products, const string& user) {
+    vector<string> result;
+    for (const auto& prod : products) {
+        if (prod.associated_user == user) {
+            result.push_back(prod.name);
+        }
+    }
+    return result;
+}
+
+int main() {
+    string filename = "products.txt";
+
+    writeProductData(filename);
+    
+    vector<Product> products = readProductData(filename);
+    
+    vector<string> linusProducts = fetchProductsByUser(products, "Linus");
+
+    cout << "Products associated with user 'Linus':" << endl;
+    for (const auto& product : linusProducts) {
+        cout << product << endl;
+    }
+
+    return 0;
+}
