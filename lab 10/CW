@@ -1,0 +1,62 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+string encrypt(const string& input_string) {
+    string encrypted_text = "";
+    for (size_t i = 0; i < input_string.size(); ++i) {
+        char ch = input_string[i];
+        int ascii_value = static_cast<int>(ch);
+        int modified_ascii = ascii_value + (i + 1);
+        encrypted_text += static_cast<char>(modified_ascii);
+    }
+    return encrypted_text;
+}
+
+string decrypt(const string& encrypted_text) {
+    string decrypted_text = "";
+    for (size_t i = 0; i < encrypted_text.size(); ++i) {
+        char ch = encrypted_text[i];
+        int ascii_value = static_cast<int>(ch);
+        int original_ascii = ascii_value - (i + 1);
+        decrypted_text += static_cast<char>(original_ascii);
+    }
+    return decrypted_text;
+}
+
+void writeToFile(const string& filename, const string& encrypted_text) {
+    ofstream outfile(filename);
+    if (outfile.is_open()) {
+        outfile << encrypted_text;
+        outfile.close();
+    }
+}
+
+string readFromFile(const string& filename) {
+    ifstream infile(filename);
+    string encrypted_text;
+    if (infile.is_open()) {
+        getline(infile, encrypted_text);
+        infile.close();
+    }
+    return encrypted_text;
+}
+
+int main() {
+    string input_string;
+    cout << "Enter String = ";
+    getline(cin, input_string);
+    
+    string encrypted_text = encrypt(input_string);
+    string filename = "encrypted_text.txt";
+    writeToFile(filename, encrypted_text);
+    
+    string encrypted_text_from_file = readFromFile(filename);
+    string decrypted_text = decrypt(encrypted_text_from_file);
+    
+    cout << "Decrypted text: " << decrypted_text << endl;
+
+    return 0;
+}
