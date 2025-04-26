@@ -1,0 +1,116 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class Task {
+public:
+    string description;
+    bool isDone;
+
+    Task(string desc, bool done = false) {
+        description = desc;
+        isDone = done;
+    }
+
+    string toString() const {
+        return (isDone ? "[X] " : "[ ] ") + description;
+    }
+};
+
+class ToDoList {
+private:
+    string filename;
+    vector<Task> tasks;
+
+    void loadTasks() {
+        tasks.clear();
+        ifstream infile(filename);
+        string line;
+        while (getline(infile, line)) {
+            if (line.size() >= 4) {
+                bool done = line.substr(0, 3) == "[X]";
+                string desc = line.substr(4);
+                tasks.push_back(Task(desc, done));
+            }
+        }
+        infile.close();
+    }
+
+    void saveTasks() {
+        ofstream outfile(filename, ios::trunc);
+        for (const auto& task : tasks) {
+            outfile << task.toString() << endl;
+        }
+        outfile.close();
+    }
+
+public:
+    ToDoList(const string& file) : filename(file) {
+        loadTasks();
+    }
+
+    void addTask(const string& desc) {
+        tasks.push_back(Task(desc));
+        saveTasks();
+        cout << "Task added.\n";
+    }
+
+    void viewTasks() const {
+        if (tasks.empty()) {
+            cout << "No tasks.\n";
+            return;
+        }
+        for (size_t i = 0; i < tasks.size(); ++i) {
+            cout << i + 1 << ". " << tasks[i].toString() << endl;
+        }
+    }
+
+    void markTaskDone(int index) {
+        if (index < 1 || index > tasks.size()) {
+            cout << "Invalid index.\n";
+            return;
+        }
+        tasks[index - 1].isDone = true;
+        saveTasks();
+        cout << "Task marked as done.\n";
+    }
+};
+
+int main() {
+    ToDoList todo("tasks.txt");
+
+    int choice;
+    do {
+        cout << "\n--- To-Do List Menu ---\n";
+        cout << "1. View tasks\n";
+        cout << "2. Add task\n";
+        cout << "3. Mark task as done\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(); // clear newline
+
+        if (choice == 1) {
+            todo.viewTasks();
+        } else if (choice == 2) {
+            string desc;
+            cout << "Enter task description: ";
+            getline(cin, desc);
+            todo.addTask(desc);
+        } else if (choice == 3) {
+            int index;
+            cout << "Enter task number to mark as done: ";
+            cin >> index;
+            todo.markTaskDone(index);
+        } else if (choice == 4) {
+            cout << "Exiting.\n";
+        } else {
+            cout << "Invalid option.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
