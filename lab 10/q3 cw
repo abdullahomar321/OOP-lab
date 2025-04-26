@@ -1,0 +1,64 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+
+using namespace std;
+
+class Product {
+public:
+    int id;
+    string name;
+    string user;
+
+    Product(int i, string n, string u) : id(i), name(n), user(u) {}
+};
+
+class ProductDatabase {
+private:
+    string filename;
+
+public:
+    ProductDatabase(const string& fname) : filename(fname) {}
+
+    void writeDummyData() {
+        ofstream file(filename);
+        file << "1,Laptop,Linus\n";
+        file << "2,Phone,John\n";
+        file << "3,Mouse,Linus\n";
+        file << "4,Keyboard,Sara\n";
+        file.close();
+        cout << "Dummy data written.\n";
+    }
+
+    void getProductsByUser(const string& targetUser) {
+        ifstream file(filename);
+        string line;
+        cout << "Products associated with user \"" << targetUser << "\":" << endl;
+
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string idStr, name, user;
+            getline(ss, idStr, ',');
+            getline(ss, name, ',');
+            getline(ss, user, ',');
+
+            if (user == targetUser) {
+                cout << "- " << name << endl;
+            }
+        }
+
+        file.close();
+    }
+};
+
+int main() {
+    ProductDatabase db("products.txt");
+
+    // Uncomment this line only once to write initial data
+    // db.writeDummyData();
+
+    db.getProductsByUser("Linus");
+
+    return 0;
+}
