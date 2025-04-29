@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+// Base class template
+template <typename T>
+class Base {
+protected:
+    T a, b;  // Two variables in base class
+public:
+    // Constructor to initialize the variables
+    Base(T a, T b) : a(a), b(b) {}
+
+    // Function to multiply the base class variables
+    T multiplyBase() {
+        return a * b;
+    }
+};
+
+// Derived class template inheriting from Base
+template <typename T>
+class Derived : public Base<T> {
+    T c, d;  // Two variables in derived class
+public:
+    // Constructor to initialize both base and derived class variables
+    Derived(T a, T b, T c, T d) : Base<T>(a, b), c(c), d(d) {}
+
+    // Function to multiply derived class variables
+    T multiplyDerived() {
+        return c * d;
+    }
+
+    // Function to multiply both base and derived class variables
+    T multiplyBoth() {
+        return this->multiplyBase() * (c * d);
+    }
+};
+
+int main() {
+    // Create an object of Derived class with int template
+    Derived<int> obj(2, 3, 4, 5);
+
+    // Output the results of multiplication
+    cout << "Multiplying base class variables (a * b): " << obj.multiplyBase() << endl;
+    cout << "Multiplying derived class variables (c * d): " << obj.multiplyDerived() << endl;
+    cout << "Multiplying both base and derived class variables: " << obj.multiplyBoth() << endl;
+
+    return 0;
+}
+
