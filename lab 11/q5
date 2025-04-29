@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+using namespace std;
+
+// Custom exception for stack underflow
+class StackUnderflowException : public exception {
+public:
+    const char* what() const noexcept override {
+        return "Stack Underflow: Cannot perform operation on an empty stack.";
+    }
+};
+
+// Stack template class
+template <typename T>
+class Stack {
+    vector<T> data; // Use vector to hold stack elements
+
+public:
+    // Push an element onto the stack
+    void push(const T& value) {
+        data.push_back(value);
+    }
+
+    // Pop an element from the stack
+    void pop() {
+        if (data.empty()) {
+            throw StackUnderflowException(); // Throw exception if the stack is empty
+        }
+        data.pop_back();
+    }
+
+    // Get the top element of the stack
+    T top() {
+        if (data.empty()) {
+            throw StackUnderflowException(); // Throw exception if the stack is empty
+        }
+        return data.back();
+    }
+
+    // Check if the stack is empty
+    bool isEmpty() const {
+        return data.empty();
+    }
+};
+
+// Main function to demonstrate stack operations and exception handling
+int main() {
+    Stack<int> stack;
+
+    try {
+        // Push some elements to the stack
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        // Print the top element
+        cout << "Top element: " << stack.top() << endl;
+
+        // Pop some elements from the stack
+        stack.pop();
+        cout << "Top element after pop: " << stack.top() << endl;
+
+        stack.pop();
+        stack.pop();
+
+        // Try popping from an empty stack, which will throw an exception
+        stack.pop();
+    }
+    catch (const StackUnderflowException& e) {
+        cout << e.what() << endl; // Handle the exception and print the error message
+    }
+
+    // Check if the stack is empty
+    if (stack.isEmpty()) {
+        cout << "The stack is empty." << endl;
+    }
+
+    return 0;
+}
