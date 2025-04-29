@@ -1,0 +1,58 @@
+#include <iostream>
+#include <stdexcept>
+
+class ArrayIndexOutOfBounds : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Array index out of bounds.";
+    }
+};
+
+template <typename T>
+class SafeArray {
+private:
+    T* data;
+    size_t size;
+
+public:
+    SafeArray(size_t s) : size(s) {
+        data = new T[s];
+    }
+
+    ~SafeArray() {
+        delete[] data;
+    }
+
+    size_t getSize() const {
+        return size;
+    }
+
+    T& operator[](size_t index) {
+        if (index >= size) {
+            throw ArrayIndexOutOfBounds();
+        }
+        return data[index];
+    }
+
+    const T& operator[](size_t index) const {
+        if (index >= size) {
+            throw ArrayIndexOutOfBounds();
+        }
+        return data[index];
+    }
+};
+
+int main() {
+    SafeArray<int> arr(5);
+
+    try {
+        arr[2] = 10;
+        std::cout << "Element at index 2: " << arr[2] << std::endl;
+
+        std::cout << "Element at index 10: " << arr[10] << std::endl;
+    } catch (const ArrayIndexOutOfBounds& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+    }
+
+    return 0;
+}
