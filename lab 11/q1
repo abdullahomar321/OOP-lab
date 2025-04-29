@@ -1,0 +1,47 @@
+#include <iostream>
+#include <stdexcept>
+#include <typeinfo>
+#include <memory>
+
+class BadTypeException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Bad type requested.";
+    }
+};
+
+template <typename T>
+class TypeSafeContainer {
+private:
+    std::shared_ptr<void> data;
+
+public:
+    template <typename U>
+    void store(const U& value) {
+        data = std::make_shared<U>(value);
+    }
+
+    template <typename U>
+    U& get() {
+        if (typeid(U) != data->type()) {
+            throw BadTypeException();
+        }
+        return *std::static_pointer_cast<U>(data);
+    }
+};
+
+int main() {
+    TypeSafeContainer<int> container;
+    container.store(42);
+
+    try {
+        int value = container.get<int>();
+        std::cout << "Stored value: " << value << std::endl;
+
+        double bad_value = container.get<double>();
+    } catch (const BadTypeException& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+    }
+
+    return 0;
+}
